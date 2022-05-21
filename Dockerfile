@@ -42,7 +42,7 @@ COPY --from=builder /workdir/go-ethereum/build/bin/geth /usr/bin/
 COPY --from=builder /workdir/info/ .
 
 ### Output bitcoind library deps to check if executable binary is compiled static:
-RUN ldd /usr/bin/geth
+RUN /usr/bin/geth version && ldd /usr/bin/geth
 
 RUN ls -lah /root && cat *.txt
 
