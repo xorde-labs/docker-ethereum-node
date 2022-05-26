@@ -1,8 +1,10 @@
-version: '3'
+version: '3.4'
 
 services:
   ethereum-node:
-    build: .
+    build:
+      context: .
+      network: host
     image: ghcr.io/xorde-nodes/ethereum-node:latest
     restart: unless-stopped
     volumes:
