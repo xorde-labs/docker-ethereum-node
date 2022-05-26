@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  ethereum-node:
+    build: .
+    image: ghcr.io/xorde-nodes/ethereum-node:latest
+    restart: unless-stopped
+    volumes:
+      - ethereum_data:/home/ethereum/.ethereum
+    environment:
+      - P2P_MAX_PEERS
+      - P2P_DISCOVERY_DISABLE
+      - RPC_ENABLE
+      - RPC_HOST
+      - RPC_MODULES
+      - RPC_ALLOW_UNPROTECTEDTX
+      - RPC_WS_HOST
+      - RPC_WS_MODULES
+      - NETWORK
+      - SYNCMODE
+      - NOPRUNING_ENABLE
+      - DB_CACHE
+    ports:
+      - ${RPC_PORT}:8545/tcp
+      - ${RPC_WS_PORT}:8545/tcp
+      - ${P2P_PORT}:30303/tcp
+      - ${P2P_PORT}:30303/udp
+
+volumes:
+  ethereum_data:
+    driver: local
