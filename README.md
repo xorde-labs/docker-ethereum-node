@@ -2,7 +2,7 @@
 
 Main goal of this project is to dockerize blockchain nodes so we could run them in pure DevOps fashion: dockerized, cluster-ready, manageable.
 
-[![Docker Image CI](https://github.com/xorde-nodes/ethereum-node/actions/workflows/docker-image.yml/badge.svg)](https://github.com/xorde-nodes/ethereum-node/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/xorde-public/docker-ethereum-node/actions/workflows/docker-image.yml/badge.svg)](https://github.com/xorde-public/docker-ethereum-node/actions/workflows/docker-image.yml)
 
 ## Installing
 
@@ -11,19 +11,19 @@ Main goal of this project is to dockerize blockchain nodes so we could run them 
 #### Standalone Docker
 
 ```shell
-docker run -d -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart unless-stopped ghcr.io/xorde/ethereum-node:latest
+docker run -d -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart unless-stopped ghcr.io/xorde-public/docker-ethereum-node:latest
 ```
 
 Store all settings and blockchain outside docker container:
 
 ```shell
-docker run -d --name ethereum-node -v /data/ethereum:/home/ethereum/.ethereum -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart always -e "RPC_SERVER=1" ghcr.io/xorde/ethereum-node:latest
+docker run -d --name ethereum-node -v /data/ethereum:/home/ethereum/.ethereum -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart always -e "RPC_SERVER=1" ghcr.io/xorde-public/docker-ethereum-node:latest
 ```
 
 Store all settings and blockchain outside docker container and run node on testnet:
 
 ```shell
-docker run -d --name ethereum-node -v /data/ethereum:/home/ethereum/.ethereum -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart always -e "TESTNET=1" -e "RPC_SERVER=1" ghcr.io/xorde/ethereum-node:latest
+docker run -d --name ethereum-node -v /data/ethereum:/home/ethereum/.ethereum -p 8545:8545 -p 8546:8546 -p 30303:30303 --restart always -e "TESTNET=1" -e "RPC_SERVER=1" ghcr.io/xorde-public/docker-ethereum-node:latest
 ```
 
 #### Docker Compose
