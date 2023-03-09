@@ -35,7 +35,7 @@ FROM alpine:latest
 ### https://specs.opencontainers.org/image-spec/annotations/
 LABEL org.opencontainers.image.title="Ethereum Node Docker Image"
 LABEL org.opencontainers.image.vendor="Xorde Technologies"
-LABEL org.opencontainers.image.source="https://github.com/xorde-nodes/ethereum-node"
+LABEL org.opencontainers.image.source="https://github.com/xorde-labs/docker-ethereum-node"
 
 ENV BLOCKCHAIN_NAME=ethereum
 WORKDIR /home/${BLOCKCHAIN_NAME}
