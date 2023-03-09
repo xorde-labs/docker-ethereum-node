@@ -1,0 +1,15 @@
+{
+  "name": "ethereum-node",
+  "version": "1.0.0",
+  "description": "Main goal of this project is to dockerize blockchain nodes so we could run them in pure DevOps fashion: dockerized, cluster-ready, manageable.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docker:build": "docker build . -t ethereum-node",
+    "docker:run": "docker run -p 8545:8545 ethereum-node --syncmode snap"
+  },
+  "author": "",
+  "license": "ISC"
+}
