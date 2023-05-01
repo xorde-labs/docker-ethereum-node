@@ -4,8 +4,9 @@ services:
   ethereum-node:
     build:
       context: .
+      network: host
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
-#    restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
@@ -34,33 +35,11 @@ services:
     command:
       - --authrpc.vhosts ethereum-node
 
-#  ### https://github.com/prysmaticlabs/prysm
-#  beacon-node:
-#    depends_on:
-#      - ethereum-node
-#    image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
-##    restart: unless-stopped
-#    volumes:
-#      - beacon_data:/data
-#      - shared_data:/.shared
-#    ports:
-#      - 4000:4000/tcp
-#      - 13000:13000/tcp
-#      - 12000:12000/udp
-#    command:
-#      - --datadir=/data
-#      - --jwt-secret=/.shared/rpc/jwtsecret
-#      - --rpc-host=0.0.0.0
-#      - --grpc-gateway-host=0.0.0.0
-#      - --monitoring-host=0.0.0.0
-#      - --execution-endpoint=ethereum-node:8551
-#      - --accept-terms-of-use#  ### https://github.com/prysmaticlabs/prysm
-
   beacon-node:
     depends_on:
       - ethereum-node
     image: sigp/lighthouse:latest
-#    restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - beacon_data:/root/.lighthouse
       - shared_data:/.shared
