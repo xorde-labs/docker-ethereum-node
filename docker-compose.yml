@@ -32,8 +32,6 @@ services:
       - SYNCMODE
       - NOPRUNING_ENABLE
       - DB_CACHE
-    command:
-      - --authrpc.vhosts ethereum-node
 
   beacon-node:
     depends_on:
