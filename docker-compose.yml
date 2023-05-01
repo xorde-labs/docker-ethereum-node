@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
-      - jwt_secret:/home/ethereum/.ethereum/geth/jwt_secret
+      - jwt_secret:/home/ethereum/.ethereum/geth/jwtsecret
     ports:
       - ${RPC_PORT}:8545/tcp
       - ${RPC_WS_PORT}:8545/tcp
