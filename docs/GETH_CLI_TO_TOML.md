@@ -1,3 +1,7 @@
+Please see also:
+https://pkg.go.dev/github.com/ethereum/go-ethereum/node?utm_source=godoc#Config
+
+
 ```toml
 [Eth]
 NetworkId = 1 # --mainnet || --goerli || --rinkeby || --ropsten || --sepolia || --kiln

@@ -107,9 +107,41 @@ if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
 	printf 'WSHost = "%s"\n' ${RPC_WS_HOST:-0.0.0.0} >> "${CONFIG_FILE}"
   printf 'HTTPModules = [%s]\n' "${RPC_MODULES}" >> "${CONFIG_FILE}"
   printf 'WSModules = [%s]\n' "${RPC_WS_MODULES}" >> "${CONFIG_FILE}"
+
   if printf "${RPC_ALLOW_UNPROTECTEDTX}" | grep -q "[Yy1]"; then
     echo "Enabling RPC_ALLOW_UNPROTECTEDTX"
     printf 'AllowUnprotectedTxs = true\n'  >> "${CONFIG_FILE}"
+  fi
+
+  printf 'AuthAddr = "%s"\n' "${RPC_AUTH_ADDR:-127.0.0.1}" >> "${CONFIG_FILE}"
+  printf 'AuthPort = %s\n' "${RPC_AUTH_PORT:-8551}" >> "${CONFIG_FILE}"
+
+  if [ -n "${RPC_AUTH_VHOSTS+1}" ]; then
+    for i in $(printf "${RPC_AUTH_VHOSTS}" | tr ',' ' '); do
+      if [ -n "${result+1}" ]; then
+        result="$result, \"$i\""
+      else
+        result="\"$i\""
+      fi
+    done
+    RPC_AUTH_VHOSTS=$result
+    unset result
+  else
+    RPC_AUTH_VHOSTS='"localhost","ethereum-node"'
+  fi
+  printf 'AuthVirtualHosts = [%s]\n' "${RPC_AUTH_VHOSTS}" >> "${CONFIG_FILE}"
+
+  ### Equivalent to --authrpc.jwtsecret
+  if [ -n "${RPC_JWT_PATH+1}" ]; then
+    echo "Overriding JWT path to ${RPC_JWT_PATH}"
+    JWT_DIR=$(dirname "${RPC_JWT_PATH}")
+    if [ ! -d "${JWT_DIR}" ]; then
+      echo "Creating JWT directory ${JWT_DIR}"
+      mkdir -p "${JWT_DIR}" | exit 1
+    else
+      echo "JWT directory ${JWT_DIR} already exists"
+    fi
+    printf 'JWTSecret = "%s"\n' "${RPC_JWT_PATH}" >> "${CONFIG_FILE}"
   fi
 fi
 

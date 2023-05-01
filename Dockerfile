@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine as builder
+FROM golang:alpine as builder
 
 ENV BLOCKCHAIN_NAME=ethereum
 
@@ -68,7 +68,12 @@ RUN find . -type f -exec sha256sum {} \; \
     && echo "Built version: $(./version.sh)" \
     && cat build_envs.txt
 
+### Create blockchain data directory
 RUN mkdir -p .${BLOCKCHAIN_NAME} \
+    && chown -R ${BLOCKCHAIN_NAME} .
+
+### Create shared volume
+RUN mkdir -p .shared \
     && chown -R ${BLOCKCHAIN_NAME} .
 
 USER ${BLOCKCHAIN_NAME}

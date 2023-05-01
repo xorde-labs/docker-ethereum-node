@@ -17,5 +17,6 @@ cat "${CONFIG_FILE}"
 echo "-----------------------"
 
 set -ex
+
 # shellcheck disable=SC2068
 exec geth --config "${CONFIG_FILE}" $@
