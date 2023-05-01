@@ -44,8 +44,8 @@ services:
       - beacon_data:/root/.lighthouse
       - shared_data:/.shared
     ports:
-      - 9000:9000/tcp
-      - 9000:9000/udp
+      - ${BEACON_PORT}:9000/tcp
+      - ${BEACON_PORT}:9000/udp
     entrypoint: ['lighthouse', 'bn']
     command: [
       '--network', 'mainnet',
