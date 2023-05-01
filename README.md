@@ -60,9 +60,6 @@ docker compose up -d
 | `P2P_MAX_PEERS`           | `50`                                      | Maximum number of peers that can be connected                                                          |
 | `P2P_DISCOVERY_DISABLE`   | `false`                                   | Disable peer discovery                                                                                 |
 
- 
-
-
 ## Upgrading
 
 Simple steps to upgrade to new version of the docker image:
