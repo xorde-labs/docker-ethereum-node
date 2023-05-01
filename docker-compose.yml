@@ -54,3 +54,5 @@ volumes:
     driver: local
   prysm_data:
     driver: local
+  jwt_secret:
+    driver: local
