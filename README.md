@@ -38,6 +38,31 @@ cp example.env .env
 docker compose up -d
 ```
 
+#### Environment variables
+
+| Variable                  | Default value                             | Description                                                                                            |
+|---------------------------|-------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `NETWORK`                 | `1`                                       | Network ID (see https://besu.hyperledger.org/en/stable/public-networks/concepts/network-and-chain-id/) |
+| `SYNCMODE`                | `snap`                                    | Synchronisation mode of the downloader. Modes: `full`, `light`, `snap`                                 |
+| `DB_CACHE`                | `512`                                     | Enable RPC server. Modes: `0`, `1`                                                                     |
+| `NOPRUNING_ENABLE`        | `false`                                   | Disable pruning and flush everything to disk                                                           |
+| `RPC_ENABLE`              | `false`                                   | Enable RPC                                                                                             |
+| `RPC_MODULES`             | `net,web3,eth`                            | Enabled modules for HTTP RPC                                                                           |
+| `RPC_WS_MODULES`          | `net,web3,eth`                            | Enabled modules for WebSocket RPC                                                                      |
+| `RPC_HOST`                | `0.0.0.0`                                 | Address for HTTP RPC listener                                                                          |
+| `RPC_WS_HOST`             | `0.0.0.0`                                 | Address for WebSocket RPC listener                                                                     |
+| `RPC_VHOSTS`              | `localhost,ethereum-node`                 | HTTP header hostnames used to validate incoming requests (protection against DNS-rebinding attack)     |
+| `RPC_ALLOW_UNPROTECTEDTX` | `false`                                   | Allows non EIP-155 protected transactions to be send over RPC                                          |
+| `RPC_AUTH_ADDR`           | `127.0.0.1`                               | Address for Authenticated HTTP RPC listener                                                            |
+| `RPC_AUTH_PORT`           | `8551`                                    | Port for Authenticated HTTP RPC listener                                                               |
+| `RPC_AUTH_VHOSTS`         | `locahost,ethereum-node`                  | HTTP header hostnames used to validate incoming requests                                               |
+| `RPC_JWT_PATH`            | `/home/ethereum/.ethereum/geth/jwtsecret` | JWT secret for Authenticated HTTP requests                                                             |
+| `P2P_MAX_PEERS`           | `50`                                      | Maximum number of peers that can be connected                                                          |
+| `P2P_DISCOVERY_DISABLE`   | `false`                                   | Disable peer discovery                                                                                 |
+
+ 
+
+
 ## Upgrading
 
 Simple steps to upgrade to new version of the docker image:

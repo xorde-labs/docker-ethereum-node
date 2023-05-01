@@ -63,13 +63,32 @@ if [ -n "${DB_CACHE+1}" ]; then
   printf 'DatabaseCache = %s\n' "${DB_CACHE}" >> "${CONFIG_FILE}"
 fi
 
-if printf "${NOPRUNING_ENABLE}" | grep -q "[Yy1]"; then
+if printf "${NOPRUNING_ENABLE}" | grep -q "[YyTt1]"; then
   echo "Enabling nopruning..."
   printf 'NoPruning = true\n' >> "${CONFIG_FILE}"
 fi
 
 ### Setting up RPC server:
-if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
+if printf "${RPC_ENABLE}" | grep -q "[YyTt1]"; then
+	printf '\n[Node]\n' >> "${CONFIG_FILE}"
+	printf 'HTTPHost = "%s"\n' ${RPC_HOST:-0.0.0.0} >> "${CONFIG_FILE}"
+	printf 'WSHost = "%s"\n' ${RPC_WS_HOST:-0.0.0.0} >> "${CONFIG_FILE}"
+
+  if [ -n "${RPC_VHOSTS+1}" ]; then
+    for i in $(printf "${RPC_VHOSTS}" | tr ',' ' '); do
+      if [ -n "${result+1}" ]; then
+        result="$result, \"$i\""
+      else
+        result="\"$i\""
+      fi
+    done
+    RPC_VHOSTS=$result
+    unset result
+  else
+    RPC_VHOSTS='"localhost","ethereum-node"'
+  fi
+  printf 'HTTPVirtualHosts = [%s]\n' "${RPC_VHOSTS}" >> "${CONFIG_FILE}"
+
   ### This transforms string 'a, b,c, d' into TOML-compatible '"a","b","c","d"'
   ### TODO: need to rewrite this with regex
   if [ -n "${RPC_MODULES+1}" ]; then
@@ -85,6 +104,7 @@ if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
   else
     RPC_MODULES='"net","web3","eth"'
   fi
+  printf 'HTTPModules = [%s]\n' "${RPC_MODULES}" >> "${CONFIG_FILE}"
 
   ### This transforms string 'a, b,c, d' into TOML-compatible '"a","b","c","d"'
   ### TODO: need to rewrite this with regex
@@ -101,14 +121,9 @@ if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
   else
     RPC_WS_MODULES='"net","web3","eth"'
   fi
-
-	printf '\n[Node]\n' >> "${CONFIG_FILE}"
-	printf 'HTTPHost = "%s"\n' ${RPC_HOST:-0.0.0.0} >> "${CONFIG_FILE}"
-	printf 'WSHost = "%s"\n' ${RPC_WS_HOST:-0.0.0.0} >> "${CONFIG_FILE}"
-  printf 'HTTPModules = [%s]\n' "${RPC_MODULES}" >> "${CONFIG_FILE}"
   printf 'WSModules = [%s]\n' "${RPC_WS_MODULES}" >> "${CONFIG_FILE}"
 
-  if printf "${RPC_ALLOW_UNPROTECTEDTX}" | grep -q "[Yy1]"; then
+  if printf "${RPC_ALLOW_UNPROTECTEDTX}" | grep -q "[YyTt1]"; then
     echo "Enabling RPC_ALLOW_UNPROTECTEDTX"
     printf 'AllowUnprotectedTxs = true\n'  >> "${CONFIG_FILE}"
   fi
@@ -152,7 +167,7 @@ if [ -n "${P2P_MAX_PEERS+1}" ]; then
   printf 'MaxPeers = %s\n' "${P2P_MAX_PEERS}" >> "${CONFIG_FILE}"
 fi
 
-if printf "${P2P_DISCOVERY_ENABLE}" | grep -q "[Yy1]"; then
+if printf "${P2P_DISCOVERY_ENABLE}" | grep -q "[YyTt1]"; then
   echo "Enabling nopruning"
   printf 'NoPruning = true\n' >> "${CONFIG_FILE}"
 fi

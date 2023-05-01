@@ -1,5 +1,7 @@
 Please see also:
-https://pkg.go.dev/github.com/ethereum/go-ethereum/node?utm_source=godoc#Config
+- https://pkg.go.dev/github.com/ethereum/go-ethereum/node?utm_source=godoc#Config
+- https://pkg.go.dev/github.com/ethereum/go-ethereum@v1.11.6/eth/ethconfig#Config
+- https://pkg.go.dev/github.com/ethereum/go-ethereum@v1.11.6/p2p#Config
 
 
 ```toml
