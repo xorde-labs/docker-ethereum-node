@@ -9,6 +9,12 @@ services:
     restart: unless-stopped
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
+      - jwt_secret:/home/ethereum/.ethereum/geth/jwt_secret
+    ports:
+      - ${RPC_PORT}:8545/tcp
+      - ${RPC_WS_PORT}:8545/tcp
+      - ${P2P_PORT}:30303/tcp
+      - ${P2P_PORT}:30303/udp
     environment:
       - P2P_MAX_PEERS
       - P2P_DISCOVERY_DISABLE
@@ -22,12 +28,29 @@ services:
       - SYNCMODE
       - NOPRUNING_ENABLE
       - DB_CACHE
+
+  ### https://github.com/prysmaticlabs/prysm
+  prysm-node:
+    image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
+    restart: unless-stopped
+    volumes:
+      - prysm_data:/data
+      - jwt_secret:/jwt_secret
     ports:
-      - ${RPC_PORT}:8545/tcp
-      - ${RPC_WS_PORT}:8545/tcp
-      - ${P2P_PORT}:30303/tcp
-      - ${P2P_PORT}:30303/udp
+      - 4000:4000/tcp
+      - 13000:13000/tcp
+      - 12000:12000/udp
+    command:
+      - --datadir=/data
+      - --jwt-secret=/jwt_secret
+      - --rpc-host=0.0.0.0
+      - --grpc-gateway-host=0.0.0.0
+      - --monitoring-host=0.0.0.0
+      - --execution-endpoint=ethereum-node:8545
+      - --accept-terms-of-use
 
 volumes:
   ethereum_data:
+    driver: local
+  prysm_data:
     driver: local
