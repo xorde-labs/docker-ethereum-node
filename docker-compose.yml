@@ -7,6 +7,10 @@ services:
       network: host
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail http://localhost:8545 || exit 1" ]
+      interval: 10s
+      timeout: 10s
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared

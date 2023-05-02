@@ -42,7 +42,7 @@ WORKDIR /home/${BLOCKCHAIN_NAME}
 
 ### Add packages
 RUN apk upgrade -U \
-    && apk add ca-certificates
+    && apk add ca-certificates curl
 
 ### Add group
 RUN addgroup -S ${BLOCKCHAIN_NAME}
