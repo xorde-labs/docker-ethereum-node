@@ -5,6 +5,8 @@ services:
     build:
       context: .
       network: host
+    networks:
+      - default
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
     restart: unless-stopped
     healthcheck:
@@ -38,6 +40,8 @@ services:
       - DB_CACHE
 
   beacon-node:
+    networks:
+      - default
     depends_on:
       - ethereum-node
     image: sigp/lighthouse:latest
