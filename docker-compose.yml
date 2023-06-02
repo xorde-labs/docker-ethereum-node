@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   ethereum-node:
@@ -6,7 +6,7 @@ services:
       context: .
       network: host
     networks:
-      - default
+      - bridge
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
     restart: unless-stopped
     healthcheck:
@@ -41,7 +41,7 @@ services:
 
   beacon-node:
     networks:
-      - default
+      - bridge
     depends_on:
       - ethereum-node
     image: sigp/lighthouse:latest
@@ -72,7 +72,7 @@ volumes:
     driver: local
 
 networks:
-  default:
+  bridge:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 1400
