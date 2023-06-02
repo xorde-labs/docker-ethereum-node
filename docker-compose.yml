@@ -66,3 +66,9 @@ volumes:
     driver: local
   shared_data:
     driver: local
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.mtu: 1400
