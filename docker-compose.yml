@@ -61,6 +61,8 @@ services:
     ]
 
   nginx:
+    networks:
+      - bridge
     image: nginx:latest
     restart: unless-stopped
     ports:
