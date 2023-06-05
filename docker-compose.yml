@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - ${RPC_PORT}:80
+    volumes:
+      - ./configs/nginx/default.conf:/etc/nginx/default.conf
+
   ethereum-node:
     build:
       context: .
@@ -17,10 +25,7 @@ services:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
     ports:
-      - ${RPC_PORT}:8545/tcp
-      - ${RPC_WS_PORT}:8545/tcp
       - ${P2P_PORT}:30303/tcp
-      - ${P2P_PORT}:30303/udp
     environment:
       - P2P_MAX_PEERS
       - P2P_DISCOVERY_DISABLE

@@ -69,3 +69,26 @@ docker compose down \
 && docker compose pull \
 && docker compose up
 ```
+
+## Troubleshooting
+
+### I can't connect to my node
+
+Please check if you have `RPC_ENABLE` environment variable set to `true`.
+Then use curl to check connection to RPC server:
+
+```shell
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"web3_clientVersion","params":[],"id":1}' \
+  http://localhost:8545
+```
+
+Or:
+
+```shell
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  http://localhost:8545
+```
