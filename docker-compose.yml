@@ -68,7 +68,7 @@ services:
     ports:
       - ${RPC_PORT}:80
     volumes:
-      - ./configs/nginx/default.conf:/etc/nginx/default.conf
+      - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf
 
 volumes:
   ethereum_data:
