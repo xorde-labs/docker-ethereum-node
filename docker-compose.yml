@@ -1,14 +1,6 @@
 version: '3.8'
 
 services:
-  nginx:
-    image: nginx:latest
-    restart: unless-stopped
-    ports:
-      - ${RPC_PORT}:80
-    volumes:
-      - ./configs/nginx/default.conf:/etc/nginx/default.conf
-
   ethereum-node:
     build:
       context: .
@@ -67,6 +59,14 @@ services:
       ### remove if you are staking:
       '--disable-deposit-contract-sync',
     ]
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - ${RPC_PORT}:80
+    volumes:
+      - ./configs/nginx/default.conf:/etc/nginx/default.conf
 
 volumes:
   ethereum_data:
