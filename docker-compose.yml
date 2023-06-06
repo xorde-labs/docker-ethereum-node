@@ -21,6 +21,7 @@ services:
     ### To avoid unclean shutdowns:
     stop_grace_period: 10m
     stop_signal: SIGINT
+    ### Volumes for persistent data:
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
