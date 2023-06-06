@@ -6,6 +6,7 @@ x-defaults: &defaults
     - bridge
   restart: unless-stopped
 
+### Define services:
 services:
   ethereum-node:
     <<: *defaults
@@ -19,6 +20,7 @@ services:
       timeout: 10s
     ### To avoid unclean shutdowns:
     stop_grace_period: 10m
+    stop_signal: SIGINT
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
