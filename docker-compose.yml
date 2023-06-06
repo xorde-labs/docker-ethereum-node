@@ -1,14 +1,18 @@
 version: '3.8'
 
+### Define default config for services:
+x-defaults: &defaults
+  networks:
+    - bridge
+  restart: unless-stopped
+
 services:
   ethereum-node:
+    <<: *defaults
     build:
       context: .
       network: host
-    networks:
-      - bridge
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
-    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "curl --fail http://localhost:8545 || exit 1" ]
       interval: 10s
@@ -37,12 +41,10 @@ services:
       - DB_CACHE
 
   beacon-node:
-    networks:
-      - bridge
+    <<: *defaults
     depends_on:
       - ethereum-node
     image: sigp/lighthouse:latest
-    restart: unless-stopped
     volumes:
       - beacon_data:/root/.lighthouse
       - shared_data:/.shared
@@ -61,10 +63,8 @@ services:
     ]
 
   nginx:
-    networks:
-      - bridge
+    <<: *defaults
     image: nginx:latest
-    restart: unless-stopped
     ports:
       - ${RPC_PORT}:80
     volumes:
