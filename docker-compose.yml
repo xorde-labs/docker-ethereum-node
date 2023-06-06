@@ -82,6 +82,6 @@ networks:
   bridge:
     driver: bridge
     driver_opts:
-      com.docker.network.driver.mtu: 1400
+      com.docker.network.driver.mtu: ${DOCKER_NETWORK_MTU:-1500}
 ### check MTU: cat /sys/class/net/eth0/mtu
 
