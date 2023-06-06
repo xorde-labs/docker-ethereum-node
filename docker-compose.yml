@@ -17,6 +17,8 @@ services:
       test: [ "CMD-SHELL", "curl --fail http://localhost:8545 || exit 1" ]
       interval: 10s
       timeout: 10s
+    ### To avoid unclean shutdowns:
+    stop_grace_period: 10m
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
