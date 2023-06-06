@@ -59,12 +59,14 @@ COPY ./scripts .
 RUN chmod 755 ./*.sh && ls -adl ./*.sh
 
 ### Copy build result from builder context
-COPY --from=builder /workdir/${BLOCKCHAIN_NAME}/build/bin/geth /usr/bin/
+COPY --from=builder /workdir/${BLOCKCHAIN_NAME}/build/bin /opt/${BLOCKCHAIN_NAME}/bin
+ENV BIN_PATH="/opt/${BLOCKCHAIN_NAME}/bin"
+ENV PATH="${BIN_PATH}:${PATH}"
 COPY --from=builder /workdir/build_info/ .
 
 ### Output build binary deps to check if it is compiled static (or else missing some libraries):
 RUN find . -type f -exec sha256sum {} \; \
-    && ldd /usr/bin/geth \
+    && ldd /opt/ethereum/bin/geth \
     && echo "Built version: $(./version.sh)" \
     && cat build_envs.txt
 
