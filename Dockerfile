@@ -87,4 +87,5 @@ ENTRYPOINT ["./entrypoint.sh"]
 ### 30303 Network
 EXPOSE 8545 8546 30303
 
-STOPSIGNAL SIGHUP
+### Stop signal equivalent to CTRL+C:
+STOPSIGNAL SIGINT
