@@ -59,6 +59,7 @@ docker compose up -d
 | `RPC_JWT_PATH`            | `/home/ethereum/.ethereum/geth/jwtsecret` | JWT secret for Authenticated HTTP requests                                                             |
 | `P2P_MAX_PEERS`           | `50`                                      | Maximum number of peers that can be connected                                                          |
 | `P2P_DISCOVERY_DISABLE`   | `false`                                   | Disable peer discovery                                                                                 |
+| `EXTRA_OPTS`              | empty                                     | Extra command line options passed to `geth` process upon start                                         |
 
 ## Upgrading
 

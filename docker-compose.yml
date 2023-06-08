@@ -44,6 +44,8 @@ services:
       - SYNCMODE
       - NOPRUNING_ENABLE
       - DB_CACHE
+    command:
+      - ${EXTRA_OPTS}
 
   beacon-node:
     <<: *defaults
