@@ -23,7 +23,6 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          - linux/arm/v6
           - linux/arm/v7
           - linux/arm64
 
@@ -51,12 +50,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-          flavor: latest=auto
-          tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
-            type=raw,value=edge,enable=${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
-            type=raw,value=${{ env.SOURCE_VERSION }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -125,7 +118,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          flavor: latest=auto
+          tags: |
+            # set latest tag for default branch
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+            type=raw,value=edge,enable=${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
+            type=raw,value=${{ env.SOURCE_VERSION }}
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
