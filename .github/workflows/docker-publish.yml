@@ -80,7 +80,7 @@ jobs:
 #            ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ matrix.platform }}
-          outputs: type=image,name="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}",push-by-digest=true,name-canonical=true
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true
           build-args: |
             DOCKER_GIT_SHA=${{ github.sha }}
             SOURCE_VERSION=${{ env.SOURCE_VERSION }}
