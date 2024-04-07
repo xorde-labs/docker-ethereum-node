@@ -1,24 +1,32 @@
-version: '3.7'
+version: '3.8'
 
+### Define default config for services:
+x-defaults: &defaults
+  networks:
+    - bridge
+  restart: unless-stopped
+
+### Define services:
 services:
   ethereum-node:
+    <<: *defaults
     build:
       context: .
       network: host
     image: ghcr.io/xorde-labs/docker-ethereum-node:latest
-    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "curl --fail http://localhost:8545 || exit 1" ]
       interval: 10s
       timeout: 10s
+    ### To avoid unclean shutdowns:
+    stop_grace_period: 10m
+    stop_signal: SIGINT
+    ### Volumes for persistent data:
     volumes:
       - ethereum_data:/home/ethereum/.ethereum
       - shared_data:/home/ethereum/.shared
     ports:
-      - ${RPC_PORT}:8545/tcp
-      - ${RPC_WS_PORT}:8545/tcp
       - ${P2P_PORT}:30303/tcp
-      - ${P2P_PORT}:30303/udp
     environment:
       - P2P_MAX_PEERS
       - P2P_DISCOVERY_DISABLE
@@ -36,12 +44,14 @@ services:
       - SYNCMODE
       - NOPRUNING_ENABLE
       - DB_CACHE
+    command:
+      - ${EXTRA_OPTS}
 
   beacon-node:
+    <<: *defaults
     depends_on:
       - ethereum-node
     image: sigp/lighthouse:latest
-    restart: unless-stopped
     volumes:
       - beacon_data:/root/.lighthouse
       - shared_data:/.shared
@@ -59,6 +69,14 @@ services:
       '--disable-deposit-contract-sync',
     ]
 
+  nginx:
+    <<: *defaults
+    image: nginx:latest
+    ports:
+      - ${RPC_PORT}:80
+    volumes:
+      - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
 volumes:
   ethereum_data:
     driver: local
@@ -66,3 +84,11 @@ volumes:
     driver: local
   shared_data:
     driver: local
+
+networks:
+  bridge:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: ${DOCKER_NETWORK_MTU:-1500}
+### check MTU: cat /sys/class/net/eth0/mtu
+

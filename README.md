@@ -59,6 +59,7 @@ docker compose up -d
 | `RPC_JWT_PATH`            | `/home/ethereum/.ethereum/geth/jwtsecret` | JWT secret for Authenticated HTTP requests                                                             |
 | `P2P_MAX_PEERS`           | `50`                                      | Maximum number of peers that can be connected                                                          |
 | `P2P_DISCOVERY_DISABLE`   | `false`                                   | Disable peer discovery                                                                                 |
+| `EXTRA_OPTS`              | empty                                     | Extra command line options passed to `geth` process upon start                                         |
 
 ## Upgrading
 
@@ -68,4 +69,27 @@ Simple steps to upgrade to new version of the docker image:
 docker compose down \
 && docker compose pull \
 && docker compose up
+```
+
+## Troubleshooting
+
+### I can't connect to my node
+
+Please check if you have `RPC_ENABLE` environment variable set to `true`.
+Then use curl to check connection to RPC server:
+
+```shell
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"web3_clientVersion","params":[],"id":1}' \
+  http://localhost:8545
+```
+
+Or:
+
+```shell
+curl -X POST \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  http://localhost:8545
 ```
