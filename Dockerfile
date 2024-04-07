@@ -1,4 +1,4 @@
-FROM golang:alpine as builder
+FROM golang:latest as builder
 
 ENV BLOCKCHAIN_NAME=ethereum
 
@@ -9,8 +9,8 @@ ARG SOURCE_REPO=https://github.com/ethereum/go-ethereum
 ARG DOCKER_GIT_SHA
 
 ### Install required dependencies
-RUN apk upgrade -U \
-    && apk add gcc musl-dev curl linux-headers git
+RUN apt update \
+    && apt install -y gcc curl git
 
 RUN mkdir -p build_info && printenv | tee build_info/build_envs.txt
 
@@ -30,7 +30,7 @@ RUN cd ${BLOCKCHAIN_NAME} && go run build/ci.go install ./cmd/geth
 ### Output any missing library deps:
 RUN { for i in $(find /workdir/${BLOCKCHAIN_NAME}/build/bin -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
 
-FROM alpine:latest
+FROM debian:12-slim
 
 ### https://specs.opencontainers.org/image-spec/annotations/
 LABEL org.opencontainers.image.title="Ethereum Node Docker Image"
@@ -41,17 +41,18 @@ ENV BLOCKCHAIN_NAME=ethereum
 WORKDIR /home/${BLOCKCHAIN_NAME}
 
 ### Add packages
-RUN apk upgrade -U \
-    && apk add ca-certificates curl
+RUN apt update \
+    && apt install -y ca-certificates curl
 
 ### Add group
-RUN addgroup -S ${BLOCKCHAIN_NAME}
+RUN addgroup ${BLOCKCHAIN_NAME}
 
 ### Add user
-RUN adduser -S -D -H -h /home/${BLOCKCHAIN_NAME} \
-    -s /sbin/nologin \
-    -G ${BLOCKCHAIN_NAME} \
-    -g "User of ${BLOCKCHAIN_NAME}" \
+RUN adduser \
+    --home /home/${BLOCKCHAIN_NAME} \
+    --shell /sbin/nologin \
+    --ingroup ${BLOCKCHAIN_NAME} \
+    --comment "User of ${BLOCKCHAIN_NAME}" \
     ${BLOCKCHAIN_NAME}
 
 ### Copy script files (entrypoint, config, etc)
@@ -66,7 +67,7 @@ COPY --from=builder /workdir/build_info/ .
 
 ### Output build binary deps to check if it is compiled static (or else missing some libraries):
 RUN find . -type f -exec sha256sum {} \;
-RUN apk add --no-cache musl libc6-compat
+#RUN apk add --no-cache musl libc6-compat
 RUN ls -l /opt/ethereum/bin/geth && sha256sum /opt/ethereum/bin/geth && ldd /opt/ethereum/bin/geth
 
 RUN echo "Built version: $(./version.sh)" \
