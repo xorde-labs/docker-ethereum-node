@@ -101,8 +101,14 @@ jobs:
 
   merge:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     needs:
       - build
+
     steps:
       - name: Determine latest release version
         run: |
