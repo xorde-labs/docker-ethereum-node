@@ -66,7 +66,7 @@ ENV PATH="${BIN_PATH}:${PATH}"
 COPY --from=builder /workdir/build_info/ .
 
 ### Output build binary deps to check if it is compiled static (or else missing some libraries):
-RUN find . -type f -exec sha256sum {} \;
+RUN find . -type f -exec sha256sum {} \;; sha256sum /opt/ethereum/bin/geth
 #RUN apk add --no-cache musl libc6-compat
 #RUN ls -l /opt/ethereum/bin/geth && sha256sum /opt/ethereum/bin/geth && ldd /opt/ethereum/bin/geth
 
