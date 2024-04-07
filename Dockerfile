@@ -68,7 +68,7 @@ COPY --from=builder /workdir/build_info/ .
 ### Output build binary deps to check if it is compiled static (or else missing some libraries):
 RUN find . -type f -exec sha256sum {} \;
 #RUN apk add --no-cache musl libc6-compat
-RUN ls -l /opt/ethereum/bin/geth && sha256sum /opt/ethereum/bin/geth && ldd /opt/ethereum/bin/geth
+#RUN ls -l /opt/ethereum/bin/geth && sha256sum /opt/ethereum/bin/geth && ldd /opt/ethereum/bin/geth
 
 RUN echo "Built version: $(./version.sh)" \
     && cat build_envs.txt
