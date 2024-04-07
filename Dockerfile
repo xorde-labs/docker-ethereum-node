@@ -28,7 +28,7 @@ RUN cd ${BLOCKCHAIN_NAME} && echo "SOURCE_SHA=$(git rev-parse HEAD)" | tee -a ..
 RUN cd ${BLOCKCHAIN_NAME} && go run build/ci.go install ./cmd/geth
 
 ### Output any missing library deps:
-RUN { for i in $(find /workdir/go-ethereum/build/bin -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
+RUN { for i in $(find /workdir/${BLOCKCHAIN_NAME}/build/bin -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
 
 FROM alpine:latest
 
@@ -65,9 +65,10 @@ ENV PATH="${BIN_PATH}:${PATH}"
 COPY --from=builder /workdir/build_info/ .
 
 ### Output build binary deps to check if it is compiled static (or else missing some libraries):
-RUN find . -type f -exec sha256sum {} \; \
-    && ldd /opt/ethereum/bin/geth \
-    && echo "Built version: $(./version.sh)" \
+RUN find . -type f -exec sha256sum {} \;
+RUN ls -l /opt/ethereum/bin/geth && sha256sum /opt/ethereum/bin/geth && ldd /opt/ethereum/bin/geth
+
+RUN echo "Built version: $(./version.sh)" \
     && cat build_envs.txt
 
 ### Create blockchain data directory
