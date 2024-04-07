@@ -104,6 +104,10 @@ jobs:
     needs:
       - build
     steps:
+      - name: Determine latest release version
+        run: |
+          echo "SOURCE_VERSION=$(basename $(curl -Ls -o /dev/null -w %{url_effective} ${SOURCE_REPO}/releases/latest))" | tee -a $GITHUB_ENV
+
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
