@@ -10,7 +10,7 @@ ARG DOCKER_GIT_SHA
 
 ### Install required dependencies
 RUN apt update \
-    && apt install -y gcc curl git
+    && apt install -y gcc g++ curl git
 
 RUN mkdir -p build_info && printenv | tee build_info/build_envs.txt
 
